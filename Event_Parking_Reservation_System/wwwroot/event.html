@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="page-title">Event — EventPark</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+    <header class="site-header"><div id="nav-root"></div></header>
+
+    <div id="loading" class="loading-spinner" style="margin-top:60px;"></div>
+
+    <section class="page-section" id="event-content" style="display:none;">
+        <div class="container">
+            <span class="ticket-eyebrow" id="ev-category" style="color:var(--indigo);"></span>
+            <h1 id="ev-name"></h1>
+            <div class="ticket-meta" id="ev-meta" style="margin-bottom:24px;"></div>
+
+            <div class="grid-2">
+                <div>
+                    <div class="panel">
+                        <h3>Choose your seats</h3>
+                        <div class="legend">
+                            <span><span class="legend-swatch" style="background:var(--teal-soft);border:1px solid var(--teal)"></span>Available</span>
+                            <span><span class="legend-swatch" style="background:var(--indigo)"></span>Selected</span>
+                            <span><span class="legend-swatch" style="background:var(--paper-dim)"></span>Taken</span>
+                        </div>
+                        <div id="seat-map" class="seat-map"></div>
+                    </div>
+
+                    <div class="panel mt-24" id="parking-panel" style="display:none;">
+                        <h3>Reserve parking <span class="muted" style="font-weight:400;font-size:0.85rem;">(optional)</span></h3>
+                        <div class="legend">
+                            <span><span class="legend-swatch" style="background:var(--teal-soft);border:1px solid var(--teal)"></span>Available</span>
+                            <span><span class="legend-swatch" style="background:var(--amber)"></span>Selected</span>
+                            <span><span class="legend-swatch" style="background:var(--paper-dim)"></span>Taken</span>
+                        </div>
+                        <div id="parking-map" class="parking-grid"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="panel summary-card">
+                        <h3>Your selection</h3>
+                        <div id="summary-lines"><p class="muted" style="font-size:0.88rem;">Pick at least one seat to get started.</p></div>
+                        <div class="summary-total">
+                            <span>Total</span>
+                            <span id="summary-total">Rs. 0.00</span>
+                        </div>
+                        <button class="btn btn-primary btn-block mt-24" id="reserve-btn" disabled>Reserve &amp; continue</button>
+                        <p class="form-hint text-center mt-24" style="margin-top:12px;">Seats are held for 15 minutes once reserved — complete payment before the timer runs out.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="event-empty" class="empty-state" style="display:none;">
+        <h3>Event not found</h3>
+        <p><a href="index.html">Back to all events</a></p>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/event.js"></script>
+</body>
+</html>

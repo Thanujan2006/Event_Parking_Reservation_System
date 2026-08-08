@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿
 using Event_Parking_Reservation_System.DTOs;
 
-namespace Event_Parking_Reservation_System.Services
+namespace Event_Parking_Reservation_System.Interfaces
 {
     public interface ISeatServices
     {
@@ -20,4 +20,3 @@ namespace Event_Parking_Reservation_System.Services
         Task DeleteSeatAsync(int seatId);
     }
 }
-

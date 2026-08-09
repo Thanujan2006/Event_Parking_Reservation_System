@@ -1,5 +1,4 @@
 ﻿using Event_Parking_Reservation_System.Models;
-using Event_Parking_Reservation_System.Entities;
 
 namespace Event_Parking_Reservation_System.Interfaces
 {

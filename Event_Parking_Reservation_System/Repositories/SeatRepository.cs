@@ -1,14 +1,15 @@
-﻿using Event_Parking_Reservation_System.Models;
+﻿using Event_Parking_Reservation_System.Data;
+using Event_Parking_Reservation_System.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Event_Parking_Reservation_System.Repositories
 {
-    public class SeatRepository
+    public class SeatRepository : ISeatRepository
     {
-        private readonly DbContext _db;
+        private readonly AppDbContext _db;
 
-        public SeatRepository(DbContext db)
+        public SeatRepository(AppDbContext db)
         {
             _db = db;
         }

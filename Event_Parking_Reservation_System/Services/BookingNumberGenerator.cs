@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Event_Parking_Reservation_System.Services
 {
-    public class BookingNumberGenerator
+    public class BookingNumberGenerator:IBookingNumberGenerator
     {
-        private readonly BookingDbContext _db;
+        private readonly AppDbContext _db;
         private readonly IDateTimeProvider _clock;
 
-        public BookingNumberGenerator(BookingDbContext db, IDateTimeProvider clock)
+        public BookingNumberGenerator(AppDbContext db, IDateTimeProvider clock)
         {
             _db = db;
             _clock = clock;
@@ -30,7 +30,7 @@ namespace Event_Parking_Reservation_System.Services
 
             if (sequence is null)
             {
-                sequence = new Entities.BookingSequence { Year = year, LastNumber = 0 };
+                sequence = new Models.BookingSequence { Year = year, LastNumber = 0 };
                 _db.BookingSequences.Add(sequence);
             }
 

@@ -1,4 +1,4 @@
-﻿namespace Event_Parking_Reservation_System.Entities
+﻿namespace Event_Parking_Reservation_System.Models
 {
     public class BookingSeat
     {

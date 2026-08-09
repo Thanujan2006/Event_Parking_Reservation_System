@@ -4,6 +4,7 @@ namespace Event_Parking_Reservation_System.Models
 {
     public class SecurityToken
     {
+        public int id { get; set; }
         public string TokenHash { get; private set; } = string.Empty;
         public DateTime ExpiresAt { get; private set; }
         public bool IsUsed { get; private set; }

@@ -1,6 +1,6 @@
-﻿
-using Event_Parking_Reservation_System.DTOs;
+﻿using Event_Parking_Reservation_System.DTOs;
 using Event_Parking_Reservation_System.Exceptions;
+using Event_Parking_Reservation_System.Interfaces;
 using Event_Parking_Reservation_System.Models;
 using Event_Parking_Reservation_System.Repositories;
 
@@ -16,7 +16,7 @@ namespace Event_Parking_Reservation_System.Services
     ///   yields exactly one winner, others get "already booked" (AC1)
     /// - Seats with an active (Held/Booked) booking cannot be deleted (AC3)
     /// </summary>
-    public class SeatService : ISeatServices
+    public class SeatService : ISeatService
     {
         private readonly SeatRepository _repository;
 

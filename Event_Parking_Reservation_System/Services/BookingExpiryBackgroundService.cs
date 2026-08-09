@@ -8,12 +8,12 @@ namespace Event_Parking_Reservation_System.Services
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<BookingExpiryBackgroundService> _logger;
-        private readonly BookingSetting _settings;
+        private readonly BookingSettings _settings;
 
         public BookingExpiryBackgroundService(
             IServiceScopeFactory scopeFactory,
             ILogger<BookingExpiryBackgroundService> logger,
-            IOptions<BookingSetting> settings)
+            IOptions<BookingSettings> settings)
         {
             _scopeFactory = scopeFactory;
             _logger = logger;

@@ -3,7 +3,7 @@ using Event_Parking_Reservation_System.DTOs;
 
 namespace Event_Parking_Reservation_System.Interfaces
 {
-    public interface ISeatServices
+    public interface ISeatService
     {
         Task GenerateSeatMapAsync(int eventId, GenerateSeatMapRequest request);
         

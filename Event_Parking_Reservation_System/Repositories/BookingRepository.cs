@@ -2,18 +2,17 @@
 using Event_Parking_Reservation_System.Data;
 using Event_Parking_Reservation_System.Enums;
 using Event_Parking_Reservation_System.Exceptions;
-using Event_Parking_Reservation_System.Models;
-using Event_Parking_Reservation_System.Entities;
 using Event_Parking_Reservation_System.Interfaces;
+using Event_Parking_Reservation_System.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Event_Parking_Reservation_System.Reposotires
 {
-    public class BookingRepository
+    public class BookingRepository : IBookingRepository
     {
-        private readonly BookingDbContext _db;
+        private readonly AppDbContext _db;
 
-        public BookingRepository(BookingDbContext db)
+        public BookingRepository(AppDbContext db)
         {
             _db = db;
         }

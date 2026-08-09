@@ -19,6 +19,7 @@
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public DateTime? DeactivatedAt { get; set; }
+        public string Role { get; internal set; }
     }
 
     public enum CustomerStatus

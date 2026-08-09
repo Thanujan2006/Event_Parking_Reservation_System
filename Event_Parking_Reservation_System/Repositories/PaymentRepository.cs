@@ -1,7 +1,6 @@
 ﻿using Event_Parking_Reservation_System.Data;
 using Event_Parking_Reservation_System.Exceptions;
 using Event_Parking_Reservation_System.Models;
-using Event_Parking_Reservation_System.Entities;
 using Microsoft.EntityFrameworkCore;
 using Event_Parking_Reservation_System.Interfaces;
 
@@ -11,9 +10,9 @@ namespace Event_Parking_Reservation_System.Reposotires
     public class PaymentRepository:IPaymentRepository
     
     {
-        private readonly PaymentDbContext _db;
+        private readonly AppDbContext _db;
 
-        public PaymentRepository(PaymentDbContext db)
+        public PaymentRepository(AppDbContext db)
         {
             _db = db;
         }

@@ -3,7 +3,6 @@ using Event_Parking_Reservation_System.Enums;
 using Event_Parking_Reservation_System.Exceptions;
 using Event_Parking_Reservation_System.Interfaces;
 using Event_Parking_Reservation_System.Models;
-using Event_Parking_Reservation_System.Entities;
 using static Event_Parking_Reservation_System.Interfaces.IExternalgateways;
 
 namespace Event_Parking_Reservation_System.Services

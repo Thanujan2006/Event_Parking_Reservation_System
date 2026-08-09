@@ -6,6 +6,7 @@ namespace Event_Parking_Reservation_System.Models
 {
     public class CustomerAccountSecurity
     {
+        public int id { get; set; }
         public bool EmailVerified { get; private set; }
         public SecurityToken? EmailVerificationToken { get; private set; }
         public SecurityToken? PasswordResetToken { get; private set; }

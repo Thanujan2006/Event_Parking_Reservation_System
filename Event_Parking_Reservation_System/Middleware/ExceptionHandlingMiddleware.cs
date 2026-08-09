@@ -4,12 +4,12 @@ using System.Text.Json;
 
 namespace Event_Parking_Reservation_System.Middleware
 {
-    public class ExceptionHandlingMiddleware
+    public class BookingExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+        private readonly ILogger<BookingExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+        public BookingExceptionHandlingMiddleware(RequestDelegate next, ILogger<BookingExceptionHandlingMiddleware> logger)
         {
             _next = next;
             _logger = logger;
@@ -54,7 +54,7 @@ namespace Event_Parking_Reservation_System.Middleware
     public static class ExceptionHandlingMiddlewareExtensions
     {
         public static IApplicationBuilder UseBookingExceptionHandling(this IApplicationBuilder app) =>
-            app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseMiddleware<BookingExceptionHandlingMiddleware>();
     }
 }
 

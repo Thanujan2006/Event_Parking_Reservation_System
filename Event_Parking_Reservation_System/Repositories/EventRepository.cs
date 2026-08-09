@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Event_Parking_Reservation_System.Data;
 using Event_Parking_Reservation_System.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,9 +10,9 @@ namespace Event_Parking_Reservation_System.Repositories
 {
     public class EventRepository : IEventRepository
     {
-        private readonly DbContext _db;
+        private readonly AppDbContext _db;
 
-        public EventRepository(DbContext db)
+        public EventRepository(AppDbContext db)
         {
             _db = db;
         }

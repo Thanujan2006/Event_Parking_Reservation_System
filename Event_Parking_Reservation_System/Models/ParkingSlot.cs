@@ -39,19 +39,11 @@ namespace Event_Parking_Reservation_System.Models
         public virtual ParkingReservation? Reservation { get; set; }
     }
 
-    /// <summary>
-    /// Minimal stub — the real Event entity lives in Module 3 (Event Management).
-    /// Included here only so this module compiles standalone.
-    /// </summary>
-    public class Event
-    {
-        public int EventId { get; set; }
-    }
 
     /// <summary>
     /// Minimal stub — the real Booking entity lives in Module 6 (Booking Management).
     /// </summary>
-    public class Booking
+    public class BookingStub
     {
         public int BookingId { get; set; }
     }

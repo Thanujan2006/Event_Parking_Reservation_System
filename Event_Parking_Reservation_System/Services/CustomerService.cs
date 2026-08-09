@@ -6,7 +6,7 @@ using static Event_Parking_Reservation_System.Exceptions.CustomerExceptions;
 
 namespace Event_Parking_Reservation_System.Services
 {
-    public class CustomerService
+    public class CustomerService: ICustomerService
     {
         private readonly ICustomerRepository _repository;
         private readonly IPasswordHasher _passwordHasher;

@@ -1,5 +1,4 @@
-﻿using Event_Parking_Reservation_System.Entities;
-using Event_Parking_Reservation_System.Enums;
+﻿using Event_Parking_Reservation_System.Enums;
 
 namespace Event_Parking_Reservation_System.Models
 {

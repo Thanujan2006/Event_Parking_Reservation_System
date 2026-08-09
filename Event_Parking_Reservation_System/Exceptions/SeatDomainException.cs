@@ -8,9 +8,10 @@ namespace Event_Parking_Reservation_System.Exceptions
         protected SeatDomainException(string message) : base(message) { }
     }
 
-    public class EventNotFoundException : SeatDomainException
+    // Renamed to avoid duplicate type name in the same namespace
+    public class SeatEventNotFoundException : SeatDomainException
     {
-        public EventNotFoundException(int eventId) : base($"Event not found: {eventId}") { }
+        public SeatEventNotFoundException(int eventId) : base($"Event not found: {eventId}") { }
     }
 
     public class SeatNotFoundException : SeatDomainException

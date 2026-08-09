@@ -1,6 +1,5 @@
 ﻿using Event_Parking_Reservation_System.Configuration;
 using Event_Parking_Reservation_System.Dtos.BookingDtos;
-using Event_Parking_Reservation_System.Entities;
 using Event_Parking_Reservation_System.Enums;
 using Event_Parking_Reservation_System.Exceptions;
 using Event_Parking_Reservation_System.Interfaces;
@@ -14,13 +13,13 @@ namespace Event_Parking_Reservation_System.Services
         private readonly IBookingRepository _repository;
         private readonly IBookingNumberGenerator _numberGenerator;
         private readonly IDateTimeProvider _clock;
-        private readonly BookingSetting _settings;
+        private readonly BookingSettings _settings;
 
         public BookingService(
             IBookingRepository repository,
             IBookingNumberGenerator numberGenerator,
             IDateTimeProvider clock,
-            IOptions<BookingSetting> settings)
+            IOptions<BookingSettings> settings)
         {
             _repository = repository;
             _numberGenerator = numberGenerator;

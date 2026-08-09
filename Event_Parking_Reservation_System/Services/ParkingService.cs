@@ -17,9 +17,9 @@ namespace Event_Parking_Reservation_System.Services
     /// </summary>
     public class ParkingService : IParkingService
     {
-        private readonly ParkingDbContext _db;
+        private readonly AppDbContext _db;
 
-        public ParkingService(ParkingDbContext db)
+        public ParkingService(AppDbContext db)
         {
             _db = db;
         }

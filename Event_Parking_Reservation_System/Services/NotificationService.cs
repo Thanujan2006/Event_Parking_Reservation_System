@@ -1,9 +1,11 @@
-﻿using Event_Parking_Reservation_System.Models;
+﻿using Event_Parking_Reservation_System.Interfaces;
+using Event_Parking_Reservation_System.Models;
+using static Event_Parking_Reservation_System.Interfaces.INotificationService;
 using static Event_Parking_Reservation_System.Models.notification;
 
 namespace Event_Parking_Reservation_System_Services
 {
-    public class NotificationService
+    public class NotificationService :INotificationService
     {
         /// <summary>
         /// Common customer contract. Other modules (Booking, Payment, Event)

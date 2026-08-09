@@ -1,6 +1,6 @@
 ﻿namespace Event_Parking_Reservation_System.Configuration
 {
-    public class BookingSetting
+    public class BookingSettings
     {
         public const string SectionName = "Booking";
 

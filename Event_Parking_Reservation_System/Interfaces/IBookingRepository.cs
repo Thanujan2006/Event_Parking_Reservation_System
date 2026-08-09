@@ -1,6 +1,4 @@
 ﻿using Event_Parking_Reservation_System.Models;
-using Event_Parking_Reservation_System.Enums;
-using Event_Parking_Reservation_System.Entities;
 
 namespace Event_Parking_Reservation_System.Interfaces
 {
@@ -32,5 +30,4 @@ namespace Event_Parking_Reservation_System.Interfaces
         Task<IReadOnlyList<Booking>> GetPendingWithExpiredHoldsAsync(DateTime now);
     }
 }
-    
 

@@ -3,7 +3,7 @@ using Event_Parking_Reservation_System.DTOs;
 using Event_Parking_Reservation_System.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ISeatServices = Event_Parking_Reservation_System.Interfaces.ISeatServices;
+using ISeatService = Event_Parking_Reservation_System.Interfaces.ISeatService;
 
 
 namespace Event_Parking_Reservation_System.Controllers
@@ -12,9 +12,9 @@ namespace Event_Parking_Reservation_System.Controllers
     [Route("api/events/{eventId:int}/seats")]
     public class EventSeatsController : ControllerBase
     {
-        private readonly ISeatServices _seatService;
+        private readonly ISeatService _seatService;
 
-        public EventSeatsController(ISeatServices seatService)
+        public EventSeatsController(ISeatService seatService)
         {
             _seatService = seatService;
         }
@@ -63,9 +63,9 @@ namespace Event_Parking_Reservation_System.Controllers
     [Route("api/bookings/{bookingId:int}/seats")]
     public class BookingSeatsController : ControllerBase
     {
-        private readonly ISeatServices _seatService;
+        private readonly ISeatService _seatService;
 
-        public BookingSeatsController(ISeatServices seatService)
+        public BookingSeatsController(ISeatService seatService)
         {
             _seatService = seatService;
         }
@@ -95,9 +95,9 @@ namespace Event_Parking_Reservation_System.Controllers
     [Route("api/seats")]
     public class SeatsController : ControllerBase
     {
-        private readonly ISeatServices _seatService;
+        private readonly ISeatService _seatService;
 
-        public SeatsController(ISeatServices seatService)
+        public SeatsController(ISeatService seatService)
         {
             _seatService = seatService;
         }

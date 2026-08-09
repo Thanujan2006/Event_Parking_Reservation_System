@@ -1,16 +1,23 @@
-﻿using Event_Parking_Reservation_System.Models;
+﻿using Event_Parking_Reservation_System.Data;
+using Event_Parking_Reservation_System.Interfaces;
+using Event_Parking_Reservation_System.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Event_Parking_Reservation_System.Reposotires
 {
-    public class CustomerRepository
-    {
-        private readonly DbContext _db;
-
-        public CustomerRepository(DbContext db)
+    
+        public class CustomerRepository : ICustomerRepository
         {
-            _db = db;
-        }
+            private readonly AppDbContext _db;
+
+            public CustomerRepository(AppDbContext db)
+            {
+                _db = db;
+            }
+
+            // methods...
+        
+
 
         public async Task<Customer?> GetByIdAsync(int customerId)
         {

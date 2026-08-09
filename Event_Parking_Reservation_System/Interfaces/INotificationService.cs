@@ -18,6 +18,7 @@ namespace Event_Parking_Reservation_System.Interfaces
         public interface INotificationPublisher
         {
             Task<Notification> CreateAsync(int customerId, NotificationType type, string message);
+            Task<Notification> CreateAsync(int customerId, Amazon.SimpleSystemsManagement.NotificationType type, string message);
         }
 
         /// <summary>

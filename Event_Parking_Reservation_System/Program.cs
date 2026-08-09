@@ -1,6 +1,6 @@
 
 using Event_Parking_Reservation_System.Exceptions;
-using FluentValidation.AspNetCore;
+using Event_Parking_Reservation_System.Repositories;
 
 namespace Event_Parking_Reservation_System
 {
@@ -16,8 +16,13 @@ namespace Event_Parking_Reservation_System
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-    //        builder.Services.AddControllers()
-    //.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RegisterCustomerRequestValidator>());
+
+            builder.Services.AddControllers();
+
+            //builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+
+            
+            //.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RegisterCustomerRequestValidator>());
 
 
             var app = builder.Build();

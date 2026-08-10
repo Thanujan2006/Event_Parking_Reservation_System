@@ -142,6 +142,7 @@ namespace Event_Parking_Reservation_System
                     }
                 });
             });
+            
 
             var app = builder.Build();
 
@@ -160,7 +161,7 @@ namespace Event_Parking_Reservation_System
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseCors("FrontendPolicy");
             app.UseAuthentication();

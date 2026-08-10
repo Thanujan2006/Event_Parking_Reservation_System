@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Event_Parking_Reservation_System.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,10 +17,10 @@ namespace Event_Parking_Reservation_System.Migrations
                 {
                     BookingId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BookingNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     EventId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     HoldExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -46,17 +46,62 @@ namespace Event_Parking_Reservation_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    Status = table.Column<byte>(type: "tinyint", nullable: false),
+                    Security_id = table.Column<int>(type: "int", nullable: false),
+                    EmailVerified = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    Security_EmailVerificationToken_id = table.Column<int>(type: "int", nullable: true),
+                    EmailVerificationToken = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EmailVerificationTokenExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EmailVerificationTokenUsed = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
+                    Security_PasswordResetToken_id = table.Column<int>(type: "int", nullable: true),
+                    PasswordResetToken = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    PasswordResetTokenExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PasswordResetTokenUsed = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeactivatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.CustomerId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventCategories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventCategories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
                     EventId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     VenueId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     EventDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DurationMinutes = table.Column<int>(type: "int", nullable: false),
-                    TicketPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TicketPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Capacity = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -67,14 +112,31 @@ namespace Event_Parking_Reservation_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    NotificationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.NotificationId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Payments",
                 columns: table => new
                 {
                     PaymentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookingId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     PaidAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -91,10 +153,10 @@ namespace Event_Parking_Reservation_System.Migrations
                     EventId = table.Column<int>(type: "int", nullable: false),
                     RowLabel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ColumnNumber = table.Column<int>(type: "int", nullable: false),
-                    SeatNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SeatNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     SeatType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PriceOverride = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    PriceOverride = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     BookingId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -104,18 +166,20 @@ namespace Event_Parking_Reservation_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SecurityToken",
+                name: "Venues",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    VenueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TokenHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsUsed = table.Column<bool>(type: "bit", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    TotalCapacity = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SecurityToken", x => x.id);
+                    table.PrimaryKey("PK_Venues", x => x.VenueId);
                 });
 
             migrationBuilder.CreateTable(
@@ -146,7 +210,7 @@ namespace Event_Parking_Reservation_System.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventId = table.Column<int>(type: "int", nullable: false),
                     SlotNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Fee = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
@@ -158,31 +222,6 @@ namespace Event_Parking_Reservation_System.Migrations
                         principalTable: "Events",
                         principalColumn: "EventId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CustomerAccountSecurity",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmailVerified = table.Column<bool>(type: "bit", nullable: false),
-                    EmailVerificationTokenid = table.Column<int>(type: "int", nullable: true),
-                    PasswordResetTokenid = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerAccountSecurity", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_CustomerAccountSecurity_SecurityToken_EmailVerificationTokenid",
-                        column: x => x.EmailVerificationTokenid,
-                        principalTable: "SecurityToken",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_CustomerAccountSecurity_SecurityToken_PasswordResetTokenid",
-                        column: x => x.PasswordResetTokenid,
-                        principalTable: "SecurityToken",
-                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -213,33 +252,11 @@ namespace Event_Parking_Reservation_System.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Customers",
-                columns: table => new
-                {
-                    CustomerId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Securityid = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeactivatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customers", x => x.CustomerId);
-                    table.ForeignKey(
-                        name: "FK_Customers_CustomerAccountSecurity_Securityid",
-                        column: x => x.Securityid,
-                        principalTable: "CustomerAccountSecurity",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_BookingNumber",
+                table: "Bookings",
+                column: "BookingNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookingSeats_BookingId",
@@ -247,24 +264,38 @@ namespace Event_Parking_Reservation_System.Migrations
                 column: "BookingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomerAccountSecurity_EmailVerificationTokenid",
-                table: "CustomerAccountSecurity",
-                column: "EmailVerificationTokenid");
+                name: "IX_BookingSeats_SeatId",
+                table: "BookingSeats",
+                column: "SeatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomerAccountSecurity_PasswordResetTokenid",
-                table: "CustomerAccountSecurity",
-                column: "PasswordResetTokenid");
+                name: "IX_BookingSequences_Year",
+                table: "BookingSequences",
+                column: "Year",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_Securityid",
+                name: "IX_Customers_Email",
                 table: "Customers",
-                column: "Securityid");
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventCategories_Name",
+                table: "EventCategories",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_CustomerId_CreatedAt",
+                table: "Notifications",
+                columns: new[] { "CustomerId", "CreatedAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ParkingReservations_BookingId",
                 table: "ParkingReservations",
-                column: "BookingId");
+                column: "BookingId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ParkingReservations_SlotId",
@@ -273,9 +304,22 @@ namespace Event_Parking_Reservation_System.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ParkingSlots_EventId",
+                name: "IX_ParkingSlots_EventId_SlotNumber",
                 table: "ParkingSlots",
-                column: "EventId");
+                columns: new[] { "EventId", "SlotNumber" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_BookingId",
+                table: "Payments",
+                column: "BookingId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Seats_EventId_SeatNumber",
+                table: "Seats",
+                columns: new[] { "EventId", "SeatNumber" },
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -291,6 +335,12 @@ namespace Event_Parking_Reservation_System.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
+                name: "EventCategories");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
+
+            migrationBuilder.DropTable(
                 name: "ParkingReservations");
 
             migrationBuilder.DropTable(
@@ -300,16 +350,13 @@ namespace Event_Parking_Reservation_System.Migrations
                 name: "Seats");
 
             migrationBuilder.DropTable(
-                name: "CustomerAccountSecurity");
+                name: "Venues");
 
             migrationBuilder.DropTable(
                 name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "ParkingSlots");
-
-            migrationBuilder.DropTable(
-                name: "SecurityToken");
 
             migrationBuilder.DropTable(
                 name: "Events");

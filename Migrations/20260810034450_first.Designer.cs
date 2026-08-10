@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Event_Parking_Reservation_System.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260809192008_init")]
-    partial class init
+    [Migration("20260810034450_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,8 @@ namespace Event_Parking_Reservation_System.Migrations
 
                     b.Property<string>("BookingNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -52,15 +53,20 @@ namespace Event_Parking_Reservation_System.Migrations
                     b.Property<int?>("ParkingSlotId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("BookingId");
 
-                    b.ToTable("Bookings");
+                    b.HasIndex("BookingNumber")
+                        .IsUnique();
+
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.BookingSeat", b =>
@@ -81,7 +87,9 @@ namespace Event_Parking_Reservation_System.Migrations
 
                     b.HasIndex("BookingId");
 
-                    b.ToTable("BookingSeats");
+                    b.HasIndex("SeatId");
+
+                    b.ToTable("BookingSeats", (string)null);
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.BookingSequence", b =>
@@ -100,7 +108,10 @@ namespace Event_Parking_Reservation_System.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookingSequences");
+                    b.HasIndex("Year")
+                        .IsUnique();
+
+                    b.ToTable("BookingSequences", (string)null);
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.Customer", b =>
@@ -119,64 +130,40 @@ namespace Event_Parking_Reservation_System.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Securityid")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("CustomerId");
 
-                    b.HasIndex("Securityid");
+                    b.HasIndex("Email")
+                        .IsUnique();
 
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("Event_Parking_Reservation_System.Models.CustomerAccountSecurity", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int?>("EmailVerificationTokenid")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("EmailVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("PasswordResetTokenid")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("EmailVerificationTokenid");
-
-                    b.HasIndex("PasswordResetTokenid");
-
-                    b.ToTable("CustomerAccountSecurity");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.Event", b =>
@@ -204,10 +191,11 @@ namespace Event_Parking_Reservation_System.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<decimal>("TicketPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -217,7 +205,31 @@ namespace Event_Parking_Reservation_System.Migrations
 
                     b.HasKey("EventId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
+                });
+
+            modelBuilder.Entity("Event_Parking_Reservation_System.Models.EventCategory", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("CategoryId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("EventCategories", (string)null);
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.ParkingReservation", b =>
@@ -242,12 +254,13 @@ namespace Event_Parking_Reservation_System.Migrations
 
                     b.HasKey("ReservationId");
 
-                    b.HasIndex("BookingId");
+                    b.HasIndex("BookingId")
+                        .IsUnique();
 
                     b.HasIndex("SlotId")
                         .IsUnique();
 
-                    b.ToTable("ParkingReservations");
+                    b.ToTable("ParkingReservations", (string)null);
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.ParkingSlot", b =>
@@ -269,14 +282,17 @@ namespace Event_Parking_Reservation_System.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("SlotId");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("EventId", "SlotNumber")
+                        .IsUnique();
 
-                    b.ToTable("ParkingSlots");
+                    b.ToTable("ParkingSlots", (string)null);
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.Payment", b =>
@@ -288,7 +304,7 @@ namespace Event_Parking_Reservation_System.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
@@ -296,12 +312,17 @@ namespace Event_Parking_Reservation_System.Migrations
                     b.Property<DateTime>("PaidAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("PaymentId");
 
-                    b.ToTable("Payments");
+                    b.HasIndex("BookingId")
+                        .IsUnique();
+
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.Seat", b =>
@@ -325,7 +346,7 @@ namespace Event_Parking_Reservation_System.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("PriceOverride")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("RowLabel")
                         .IsRequired()
@@ -333,40 +354,90 @@ namespace Event_Parking_Reservation_System.Migrations
 
                     b.Property<string>("SeatNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("SeatType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("SeatId");
 
-                    b.ToTable("Seats");
+                    b.HasIndex("EventId", "SeatNumber")
+                        .IsUnique();
+
+                    b.ToTable("Seats", (string)null);
                 });
 
-            modelBuilder.Entity("Event_Parking_Reservation_System.Models.SecurityToken", b =>
+            modelBuilder.Entity("Event_Parking_Reservation_System.Models.Venue", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("VenueId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VenueId"));
 
-                    b.Property<DateTime>("ExpiresAt")
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("TokenHash")
+                    b.Property<int>("TotalCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("VenueId");
+
+                    b.ToTable("Venues", (string)null);
+                });
+
+            modelBuilder.Entity("Event_Parking_Reservation_System.Models.notification+Notification", b =>
+                {
+                    b.Property<int>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsRead")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("NotificationId");
 
-                    b.ToTable("SecurityToken");
+                    b.HasIndex("CustomerId", "CreatedAt");
+
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.BookingSeat", b =>
@@ -380,28 +451,98 @@ namespace Event_Parking_Reservation_System.Migrations
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.Customer", b =>
                 {
-                    b.HasOne("Event_Parking_Reservation_System.Models.CustomerAccountSecurity", "Security")
-                        .WithMany()
-                        .HasForeignKey("Securityid")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.OwnsOne("Event_Parking_Reservation_System.Models.CustomerAccountSecurity", "Security", b1 =>
+                        {
+                            b1.Property<int>("CustomerId")
+                                .HasColumnType("int");
+
+                            b1.Property<bool>("EmailVerified")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("bit")
+                                .HasDefaultValue(false)
+                                .HasColumnName("EmailVerified");
+
+                            b1.Property<int>("id")
+                                .HasColumnType("int");
+
+                            b1.HasKey("CustomerId");
+
+                            b1.ToTable("Customers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CustomerId");
+
+                            b1.OwnsOne("Event_Parking_Reservation_System.Models.SecurityToken", "EmailVerificationToken", b2 =>
+                                {
+                                    b2.Property<int>("CustomerAccountSecurityCustomerId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<DateTime>("ExpiresAt")
+                                        .HasColumnType("datetime2")
+                                        .HasColumnName("EmailVerificationTokenExpiresAt");
+
+                                    b2.Property<bool>("IsUsed")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("bit")
+                                        .HasDefaultValue(false)
+                                        .HasColumnName("EmailVerificationTokenUsed");
+
+                                    b2.Property<string>("TokenHash")
+                                        .IsRequired()
+                                        .HasMaxLength(512)
+                                        .HasColumnType("nvarchar(512)")
+                                        .HasColumnName("EmailVerificationToken");
+
+                                    b2.Property<int>("id")
+                                        .HasColumnType("int");
+
+                                    b2.HasKey("CustomerAccountSecurityCustomerId");
+
+                                    b2.ToTable("Customers");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("CustomerAccountSecurityCustomerId");
+                                });
+
+                            b1.OwnsOne("Event_Parking_Reservation_System.Models.SecurityToken", "PasswordResetToken", b2 =>
+                                {
+                                    b2.Property<int>("CustomerAccountSecurityCustomerId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<DateTime>("ExpiresAt")
+                                        .HasColumnType("datetime2")
+                                        .HasColumnName("PasswordResetTokenExpiresAt");
+
+                                    b2.Property<bool>("IsUsed")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("bit")
+                                        .HasDefaultValue(false)
+                                        .HasColumnName("PasswordResetTokenUsed");
+
+                                    b2.Property<string>("TokenHash")
+                                        .IsRequired()
+                                        .HasMaxLength(512)
+                                        .HasColumnType("nvarchar(512)")
+                                        .HasColumnName("PasswordResetToken");
+
+                                    b2.Property<int>("id")
+                                        .HasColumnType("int");
+
+                                    b2.HasKey("CustomerAccountSecurityCustomerId");
+
+                                    b2.ToTable("Customers");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("CustomerAccountSecurityCustomerId");
+                                });
+
+                            b1.Navigation("EmailVerificationToken");
+
+                            b1.Navigation("PasswordResetToken");
+                        });
+
+                    b.Navigation("Security")
                         .IsRequired();
-
-                    b.Navigation("Security");
-                });
-
-            modelBuilder.Entity("Event_Parking_Reservation_System.Models.CustomerAccountSecurity", b =>
-                {
-                    b.HasOne("Event_Parking_Reservation_System.Models.SecurityToken", "EmailVerificationToken")
-                        .WithMany()
-                        .HasForeignKey("EmailVerificationTokenid");
-
-                    b.HasOne("Event_Parking_Reservation_System.Models.SecurityToken", "PasswordResetToken")
-                        .WithMany()
-                        .HasForeignKey("PasswordResetTokenid");
-
-                    b.Navigation("EmailVerificationToken");
-
-                    b.Navigation("PasswordResetToken");
                 });
 
             modelBuilder.Entity("Event_Parking_Reservation_System.Models.ParkingReservation", b =>

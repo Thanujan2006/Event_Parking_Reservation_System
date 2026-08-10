@@ -5,7 +5,7 @@ async function load() {
     const customer = Auth.currentCustomer();
 
     try {
-        const dash = await Api.get(`/dashboard/customer/${customer.customerId}`);
+        const dash = await Api.get(`/dashboard/customers/${customers.customerId}`);
 
         document.getElementById("upcoming-list").innerHTML = dash.upcomingBookings.length
             ? dash.upcomingBookings
@@ -13,7 +13,7 @@ async function load() {
                     (b) => `
         <div class="summary-line" style="align-items:flex-start;">
           <span>
-            <a href="${b.status === "Pending" ? `checkout.html?bookingId=${b.bookingId}` : "my-bookings.html"}">${escapeHtml(b.eventName)}</a>
+            <a href="${b.status === "Pending" ? `checkout.html?bookingId=${b.BookingId}` : "my-bookings.html"}">${escapeHtml(b.Eventid)}</a>
             <br /><span class="muted" style="font-size:0.8rem;">${escapeHtml(b.bookingNumber)} · ${b.status}</span>
           </span>
           <span>${formatMoney(b.totalAmount)}</span>
@@ -30,7 +30,7 @@ async function load() {
             ? dash.recentPayments
                 .map(
                     (p) => `<div class="summary-line">
-          <span><a href="receipt.html?paymentId=${p.paymentId}">${escapeHtml(p.bookingNumber)}</a></span>
+          <span><a href="receipt.html?paymentId=${p.PaymentId}">${escapeHtml(p.bookingNumber)}</a></span>
           <span>${formatMoney(p.amount)}</span>
         </div>`
                 )
@@ -41,9 +41,9 @@ async function load() {
         document.getElementById("notifications-list").innerHTML = dash.unreadNotifications.length
             ? dash.unreadNotifications
                 .map(
-                    (n) => `<div class="alert alert-info" style="margin-bottom:8px;" data-id="${n.notificationId}">
+                    (n) => `<div class="alert alert-info" style="margin-bottom:8px;" data-id="${n.NotificationId}">
           ${escapeHtml(n.message)}
-          <button class="btn btn-ghost btn-sm" style="margin-left:8px;" data-action="mark-read" data-id="${n.notificationId}">Mark read</button>
+          <button class="btn btn-ghost btn-sm" style="margin-left:8px;" data-action="mark-read" data-id="${n.NotificationId}">Mark read</button>
         </div>`
                 )
                 .join("")

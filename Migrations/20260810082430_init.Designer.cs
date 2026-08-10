@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Event_Parking_Reservation_System.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260810034450_first")]
-    partial class first
+    [Migration("20260810082430_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

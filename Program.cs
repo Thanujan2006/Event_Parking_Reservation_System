@@ -109,9 +109,9 @@ namespace Event_Parking_Reservation_System
                 options.AddPolicy("FrontendPolicy", policy =>
                 {
                     policy.WithOrigins(
-                            builder.Configuration["Frontend:BaseUrl"] ?? "http://localhost:5500",
+                            builder.Configuration["Frontend:BaseUrl"] ?? "https://localhost:7294",
                             "http://127.0.0.1:5500",
-                            "http://localhost:5500")
+                            "http://localhost:5185")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });

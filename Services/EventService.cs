@@ -17,10 +17,12 @@ namespace Event_Parking_Reservation_System.Services
     public class EventService : IEventService
     {
         private readonly IEventRepository _repository;
+        private readonly SeatRepository _seatRepository;
 
-        public EventService(IEventRepository repository)
+        public EventService(IEventRepository repository, SeatRepository seatRepository)
         {
             _repository = repository;
+            _seatRepository = seatRepository;
         }
 
         public async Task<EventDetailDto> CreateAsync(CreateEventRequest request)
@@ -68,8 +70,11 @@ namespace Event_Parking_Reservation_System.Services
                     VenueName = await _repository.GetVenueNameAsync(ev.VenueId),
                     CategoryName = await _repository.GetCategoryNameAsync(ev.CategoryId),
                     EventDateTime = ev.EventDateTime,
+                    EventDate = ev.EventDateTime.ToString("yyyy-MM-dd"),
+                    StartTime = ev.EventDateTime.ToString("HH:mm:ss"),
                     TicketPrice = ev.TicketPrice,
-                    Capacity = ev.Capacity
+                    Capacity = ev.Capacity,
+                    SeatsAvailable = await ResolveSeatsAvailableAsync(ev)
                 });
             }
 
@@ -141,19 +146,36 @@ namespace Event_Parking_Reservation_System.Services
             }
         }
 
-        private async Task<EventDetailDto> MapToDetailDtoAsync(Event ev) => new()
+        private async Task<EventDetailDto> MapToDetailDtoAsync(Event ev)
         {
-            EventId = ev.EventId,
-            Name = ev.Name,
-            VenueId = ev.VenueId,
-            VenueName = await _repository.GetVenueNameAsync(ev.VenueId),
-            CategoryId = ev.CategoryId,
-            CategoryName = await _repository.GetCategoryNameAsync(ev.CategoryId),
-            EventDateTime = ev.EventDateTime,
-            DurationMinutes = ev.DurationMinutes,
-            TicketPrice = ev.TicketPrice,
-            Capacity = ev.Capacity,
-            CreatedAt = ev.CreatedAt
-        };
+            var end = ev.EventDateTime.AddMinutes(ev.DurationMinutes);
+            return new EventDetailDto
+            {
+                EventId = ev.EventId,
+                Name = ev.Name,
+                VenueId = ev.VenueId,
+                VenueName = await _repository.GetVenueNameAsync(ev.VenueId),
+                CategoryId = ev.CategoryId,
+                CategoryName = await _repository.GetCategoryNameAsync(ev.CategoryId),
+                EventDateTime = ev.EventDateTime,
+                EventDate = ev.EventDateTime.ToString("yyyy-MM-dd"),
+                StartTime = ev.EventDateTime.ToString("HH:mm:ss"),
+                EndTime = end.ToString("HH:mm:ss"),
+                DurationMinutes = ev.DurationMinutes,
+                TicketPrice = ev.TicketPrice,
+                Capacity = ev.Capacity,
+                SeatsAvailable = await ResolveSeatsAvailableAsync(ev),
+                CreatedAt = ev.CreatedAt
+            };
+        }
+
+        private async Task<int> ResolveSeatsAvailableAsync(Event ev)
+        {
+            var seatCount = await _seatRepository.GetSeatCountForEventAsync(ev.EventId);
+            if (seatCount == 0)
+                return ev.Capacity;
+
+            return await _seatRepository.CountAvailableSeatsForEventAsync(ev.EventId);
+        }
     }
 }

@@ -57,11 +57,12 @@ async function search() {
     try {
         const events = await Api.get(`/events?${params.toString()}`);
         loading.style.display = "none";
-        if (events.length === 0) {
+        const list = Array.isArray(events) ? events : (events.items || []);
+        if (list.length === 0) {
             empty.style.display = "block";
             return;
         }
-        grid.innerHTML = events.map(ticketCardHtml).join("");
+        grid.innerHTML = list.map(ticketCardHtml).join("");
     } catch (err) {
         loading.style.display = "none";
         toast(errorMessage(err), "error");

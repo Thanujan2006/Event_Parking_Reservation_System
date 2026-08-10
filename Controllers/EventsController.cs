@@ -25,7 +25,7 @@ namespace Event_Parking_Reservation_System.Controllers
         /// AC2 — 400 Bad Request if capacity exceeds venue capacity.
         /// </summary>
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin,Administrator")]
         public async Task<ActionResult<EventDetailDto>> Create(CreateEventRequest request)
         {
             try
@@ -75,7 +75,7 @@ namespace Event_Parking_Reservation_System.Controllers
         }
 
         [HttpPut("{eventId:int}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin,Administrator")]
         public async Task<ActionResult<EventDetailDto>> Update(int eventId, UpdateEventRequest request)
         {
             try
@@ -105,7 +105,7 @@ namespace Event_Parking_Reservation_System.Controllers
         }
 
         [HttpDelete("{eventId:int}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin,Administrator")]
         public async Task<ActionResult> Delete(int eventId)
         {
             try

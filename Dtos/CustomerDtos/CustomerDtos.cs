@@ -6,10 +6,24 @@
         public class RegisterCustomerRequest
         {
             public string Name { get; set; } = string.Empty;
+
+            /// <summary>SPA alias for Name (register.js sends fullName).</summary>
+            public string FullName { get; set; } = string.Empty;
+
             public string Email { get; set; } = string.Empty;
             public string PhoneNumber { get; set; } = string.Empty;
+
+            /// <summary>SPA alias for PhoneNumber (register.js sends phone).</summary>
+            public string Phone { get; set; } = string.Empty;
+
             public string Password { get; set; } = string.Empty;
             public string ConfirmPassword { get; set; } = string.Empty;
+
+            public string ResolvedName =>
+                !string.IsNullOrWhiteSpace(Name) ? Name : FullName;
+
+            public string ResolvedPhone =>
+                !string.IsNullOrWhiteSpace(PhoneNumber) ? PhoneNumber : Phone;
         }
 
         /// <summary>Response returned after successful registration (201 Created).</summary>
@@ -18,7 +32,7 @@
             public int CustomerId { get; set; }
             public string Email { get; set; } = string.Empty;
             public string Status { get; set; } = string.Empty;
-            public string Message { get; set; } = "Registration successful. Please verify your email.";
+            public string Message { get; set; } = "Registration successful. You can log in now.";
         }
 
         /// <summary>Customer's own profile view (GET /api/customers/me).</summary>

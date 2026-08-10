@@ -29,6 +29,7 @@ namespace Event_Parking_Reservation_System
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
             builder.Services.Configure<BookingSettings>(builder.Configuration.GetSection(BookingSettings.SectionName));
             builder.Services.Configure<AuthTokenOptions>(builder.Configuration.GetSection("AuthTokens"));
+            builder.Services.Configure<AdminSeedSettings>(builder.Configuration.GetSection(AdminSeedSettings.SectionName));
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -38,6 +39,7 @@ namespace Event_Parking_Reservation_System
             builder.Services.AddScoped<ICustomerAccountRepository, CustomerAccountRepositoryAdapter>();
             builder.Services.AddScoped<IAuthEmailSender, SmtpAuthEmailSender>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddSingleton<ITokenGenarater, TokenSecurity.CryptoTokenGenerator>();
             builder.Services.AddSingleton<ITokenHasher, TokenSecurity.Sha256TokenHasher>();
 
@@ -109,7 +111,7 @@ namespace Event_Parking_Reservation_System
                 options.AddPolicy("FrontendPolicy", policy =>
                 {
                     policy.WithOrigins(
-                            builder.Configuration["Frontend:BaseUrl"] ?? "http://localhost:5500",
+                            builder.Configuration["Frontend:BaseUrl"] ?? "https://localhost:7294",
                             "http://127.0.0.1:5500",
                             "http://localhost:5500")
                           .AllowAnyHeader()
@@ -153,6 +155,8 @@ namespace Event_Parking_Reservation_System
                 // Prefer `dotnet ef database update` once a clean migration set is generated.
                 db.Database.EnsureCreated();
             }
+
+            AdminSeeder.SeedAsync(app.Services).GetAwaiter().GetResult();
 
             app.UseMiddleware<ExceptionMiddleware>();
 

@@ -39,5 +39,7 @@ namespace Event_Parking_Reservation_System.Interfaces
         Task ResendVerificationAsync(string email);
         Task ForgotPasswordAsync(string email);
         Task ResetPasswordAsync(string email, string token, string newPassword);
+        Task ResetPasswordByTokenAsync(string token, string newPassword);
+        Task<Dtos.AuthDtos.AuthDtos.LoginResponse> LoginAsync(string email, string password);
     }
 }

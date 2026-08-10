@@ -25,7 +25,7 @@ namespace Event_Parking_Reservation_System.Controllers
         /// Admin: create venue. 201 Created on success.
         /// </summary>
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin,Administrator")]
         public async Task<ActionResult<VenueSummaryDto>> Create(
             CreateVenueRequest request)
         {
@@ -100,7 +100,7 @@ namespace Event_Parking_Reservation_System.Controllers
         /// Admin: update venue.
         /// </summary>
         [HttpPut("{venueId:int}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin,Administrator")]
         public async Task<ActionResult<VenueDetailDto>> Update(
             int venueId,
             UpdateVenueRequest request)
@@ -124,7 +124,7 @@ namespace Event_Parking_Reservation_System.Controllers
         /// Returns 409 if the venue has upcoming events.
         /// </summary>
         [HttpDelete("{venueId:int}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin,Administrator")]
         public async Task<ActionResult> Delete(int venueId)
         {
             try
@@ -165,7 +165,7 @@ namespace Event_Parking_Reservation_System.Controllers
         /// Returns 409 if category name already exists.
         /// </summary>
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin,Administrator")]
         public async Task<ActionResult<CategoryDto>> Create(
             CreateCategoryRequest request)
         {
@@ -203,7 +203,7 @@ namespace Event_Parking_Reservation_System.Controllers
         /// Admin: update category.
         /// </summary>
         [HttpPut("{categoryId:int}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin,Administrator")]
         public async Task<ActionResult<CategoryDto>> Update(
             int categoryId,
             UpdateCategoryRequest request)
@@ -234,7 +234,7 @@ namespace Event_Parking_Reservation_System.Controllers
         /// Returns 409 if category is currently in use.
         /// </summary>
         [HttpDelete("{categoryId:int}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin,Administrator")]
         public async Task<ActionResult> Delete(int categoryId)
         {
             try

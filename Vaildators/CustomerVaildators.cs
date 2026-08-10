@@ -9,17 +9,21 @@ namespace Event_Parking_Reservation_System.Vaildators
         {
             public RegisterCustomerRequestValidator()
             {
-                RuleFor(x => x.Name)
-                    .NotEmpty().WithMessage("Name is required.")
-                    .MinimumLength(2).WithMessage("Name must be at least 2 characters.");
+                RuleFor(x => x)
+                    .Must(x => !string.IsNullOrWhiteSpace(x.ResolvedName))
+                    .WithMessage("Name is required.")
+                    .Must(x => (x.ResolvedName?.Trim().Length ?? 0) >= 2)
+                    .WithMessage("Name must be at least 2 characters.");
 
                 RuleFor(x => x.Email)
                     .NotEmpty().WithMessage("Email is required.")
                     .EmailAddress().WithMessage("Email must be a valid, RFC-compliant address.");
 
-                RuleFor(x => x.PhoneNumber)
-                    .NotEmpty().WithMessage("Phone number is required.")
-                    .Matches(@"^\d{10}$").WithMessage("Phone number must be exactly 10 digits.");
+                RuleFor(x => x)
+                    .Must(x => !string.IsNullOrWhiteSpace(x.ResolvedPhone))
+                    .WithMessage("Phone number is required.")
+                    .Must(x => System.Text.RegularExpressions.Regex.IsMatch(x.ResolvedPhone ?? "", @"^\d{10}$"))
+                    .WithMessage("Phone number must be exactly 10 digits.");
 
                 RuleFor(x => x.Password)
                     .NotEmpty().WithMessage("Password is required.")
@@ -28,7 +32,9 @@ namespace Event_Parking_Reservation_System.Vaildators
                     .Matches(@"[\W_]").WithMessage("Password must contain at least one special character.");
 
                 RuleFor(x => x.ConfirmPassword)
-                    .Equal(x => x.Password).WithMessage("Password and confirmation do not match.");
+                    .Must((req, confirm) =>
+                        string.IsNullOrWhiteSpace(confirm) || confirm == req.Password)
+                    .WithMessage("Password and confirmation do not match.");
             }
         }
 

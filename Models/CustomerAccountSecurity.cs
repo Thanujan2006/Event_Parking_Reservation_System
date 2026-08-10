@@ -19,6 +19,12 @@ namespace Event_Parking_Reservation_System.Models
             EmailVerified = false
         };
 
+        /// <summary>Simple beginner flow: account is usable immediately after register.</summary>
+        public static CustomerAccountSecurity NewActive() => new CustomerAccountSecurity
+        {
+            EmailVerified = true
+        };
+
         /// <summary>
         /// BRD Rule #2 / #3: issues a new verification token, invalidating
         /// any previous one. Used both at registration and on resend.

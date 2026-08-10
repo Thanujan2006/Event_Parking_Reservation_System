@@ -20,8 +20,7 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
         await Api.post("/customers/register", payload);
         document.getElementById("register-form").style.display = "none";
         alertHost.innerHTML = `<div class="alert alert-info">
-      Account created! We've sent a verification link to <strong>${escapeHtml(payload.email)}</strong>.
-      Click it to activate your account, then <a href="login.html">log in</a>.
+      Account created! You can <a href="login.html">log in</a> now with your email and password.
     </div>`;
     } catch (err) {
         alertHost.innerHTML = `<div class="alert alert-error">${escapeHtml(errorMessage(err))}</div>`;

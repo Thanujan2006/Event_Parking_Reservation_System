@@ -33,5 +33,12 @@
         {
             public CustomerNotFoundException() : base("Customer not found.") { }
         }
+
+        /// <summary>Invalid email/password on login → 401 (generic message, no account enumeration).</summary>
+        public class InvalidCredentialsException : Exception
+        {
+            public InvalidCredentialsException()
+                : base("Invalid email or password.") { }
+        }
     }
 }

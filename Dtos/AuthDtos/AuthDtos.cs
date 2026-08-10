@@ -21,8 +21,9 @@ namespace Event_Parking_Reservation_System.Dtos.AuthDtos
             [Required]
             public string Token { get; set; } = string.Empty;
 
-            [Required]
-            public string Email { get; set; } = string.Empty;
+            /// <summary>Optional when resetting via emailed link (token alone is enough).</summary>
+            [EmailAddress]
+            public string? Email { get; set; }
 
             // BRD 4.9.12: same complexity rules as registration (Module 1) —
             // enforced by [RegularExpression] here and re-validated by
@@ -43,6 +44,31 @@ namespace Event_Parking_Reservation_System.Dtos.AuthDtos
         public class VerifyEmailResponse
         {
             public string Message { get; set; } = string.Empty;
+        }
+
+        public class LoginRequest
+        {
+            [Required, EmailAddress]
+            public string Email { get; set; } = string.Empty;
+
+            [Required]
+            public string Password { get; set; } = string.Empty;
+        }
+
+        public class LoginCustomerDto
+        {
+            public int CustomerId { get; set; }
+            public string FullName { get; set; } = string.Empty;
+            public string Email { get; set; } = string.Empty;
+            public string Phone { get; set; } = string.Empty;
+            public string Role { get; set; } = string.Empty;
+            public string Status { get; set; } = string.Empty;
+        }
+
+        public class LoginResponse
+        {
+            public string Token { get; set; } = string.Empty;
+            public LoginCustomerDto Customer { get; set; } = new();
         }
     }
 }

@@ -9,20 +9,20 @@ namespace Event_Parking_Reservation_System.Services
     {
         private readonly ICustomerRepository _repository;
         private readonly IPasswordHasher _passwordHasher;
-        private readonly IAuthService _authService;
 
         public CustomerService(
             ICustomerRepository repository,
-            IPasswordHasher passwordHasher,
-            IAuthService authService)
+            IPasswordHasher passwordHasher)
         {
             _repository = repository;
             _passwordHasher = passwordHasher;
-            _authService = authService;
         }
 
         public async Task<RegisterCustomerResponse> RegisterAsync(RegisterCustomerRequest request)
         {
+            if (string.IsNullOrWhiteSpace(request.ConfirmPassword))
+                request.ConfirmPassword = request.Password;
+
             var normalizedEmail = request.Email.Trim().ToLowerInvariant();
 
             if (await _repository.EmailExistsAsync(normalizedEmail))
@@ -30,27 +30,23 @@ namespace Event_Parking_Reservation_System.Services
 
             var customer = new Customer
             {
-                Name = request.Name.Trim(),
+                Name = request.ResolvedName.Trim(),
                 Email = normalizedEmail,
-                PhoneNumber = request.PhoneNumber.Trim(),
+                PhoneNumber = request.ResolvedPhone.Trim(),
                 PasswordHash = _passwordHasher.Hash(request.Password),
-                Status = CustomerStatus.Unverified,
-                Security = CustomerAccountSecurity.NewUnverified(),
+                Status = CustomerStatus.Active,
+                Security = CustomerAccountSecurity.NewActive(),
                 CreatedAt = DateTime.UtcNow
             };
 
             var newId = await _repository.AddAsync(customer);
 
-            // Authentication module creates, hashes, stores and sends the
-            // verification token. This replaces the old disconnected
-            // IVerificationEmailSender contract.
-            await _authService.IssueEmailVerificationTokenForNewCustomerAsync(newId, customer.Email);
-
             return new RegisterCustomerResponse
             {
                 CustomerId = newId,
                 Email = customer.Email,
-                Status = customer.Status.ToString()
+                Status = customer.Status.ToString(),
+                Message = "Registration successful. You can log in now."
             };
         }
 
@@ -139,10 +135,7 @@ namespace Event_Parking_Reservation_System.Services
             var customer = await _repository.GetByIdAsync(customerId)
                 ?? throw new CustomerNotFoundException(customerId);
 
-            // Email verification is still mandatory after reactivation.
-            customer.Status = customer.Security.EmailVerified
-                ? CustomerStatus.Active
-                : CustomerStatus.Unverified;
+            customer.Status = CustomerStatus.Active;
             customer.DeactivatedAt = null;
             customer.UpdatedAt = DateTime.UtcNow;
             await _repository.UpdateAsync(customer);

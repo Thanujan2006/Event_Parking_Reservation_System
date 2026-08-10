@@ -1,32 +1,40 @@
 ﻿using Event_Parking_Reservation_System.Interfaces;
 using Event_Parking_Reservation_System.Models;
 using Microsoft.Extensions.Options;
+using static Event_Parking_Reservation_System.Dtos.AuthDtos.AuthDtos;
 using static Event_Parking_Reservation_System.Exceptions.AuthExceptions;
+using static Event_Parking_Reservation_System.Exceptions.CustomerExceptions;
 
 namespace Event_Parking_Reservation_System.Services
 {
     public class AuthService : IAuthService
     {
         private readonly ICustomerAccountRepository _repository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IAuthEmailSender _emailSender;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenGenarater _tokenGenerator;
         private readonly ITokenHasher _tokenHasher;
+        private readonly IJwtTokenService _jwtTokenService;
         private readonly AuthTokenOptions _options;
 
         public AuthService(
             ICustomerAccountRepository repository,
+            ICustomerRepository customerRepository,
             IAuthEmailSender emailSender,
             IPasswordHasher passwordHasher,
             ITokenGenarater tokenGenerator,
             ITokenHasher tokenHasher,
+            IJwtTokenService jwtTokenService,
             IOptions<AuthTokenOptions> options)
         {
             _repository = repository;
+            _customerRepository = customerRepository;
             _emailSender = emailSender;
             _passwordHasher = passwordHasher;
             _tokenGenerator = tokenGenerator;
             _tokenHasher = tokenHasher;
+            _jwtTokenService = jwtTokenService;
             _options = options.Value;
         }
 
@@ -34,7 +42,7 @@ namespace Event_Parking_Reservation_System.Services
         public async Task<string> IssueEmailVerificationTokenForNewCustomerAsync(int customerId, string email)
         {
             var record = await _repository.GetByIdAsync(customerId)
-                ?? throw new CustomerNotFoundException();
+                ?? throw new Exceptions.AuthExceptions.CustomerNotFoundException();
 
             var rawToken = record.Security.IssueEmailVerificationToken(
                 _options.EmailVerificationLifetime, _tokenGenerator, _tokenHasher);
@@ -63,7 +71,7 @@ namespace Event_Parking_Reservation_System.Services
         public async Task ResendVerificationAsync(string email)
         {
             var record = await _repository.GetByEmailAsync(email)
-                ?? throw new CustomerNotFoundException();
+                ?? throw new Exceptions.AuthExceptions.CustomerNotFoundException();
 
             var rawToken = record.Security.IssueEmailVerificationToken(
                 _options.EmailVerificationLifetime, _tokenGenerator, _tokenHasher);
@@ -100,6 +108,49 @@ namespace Event_Parking_Reservation_System.Services
 
             await _repository.SaveSecurityStateAsync(record.CustomerId, record.Security);
             await _repository.SetPasswordHashAsync(record.CustomerId, _passwordHasher.Hash(newPassword));
+        }
+
+        /// <summary>Token-only reset used by the frontend reset-password page.</summary>
+        public async Task ResetPasswordByTokenAsync(string token, string newPassword)
+        {
+            var tokenHash = _tokenHasher.Hash(token);
+            var record = await _repository.GetByPasswordResetTokenHashAsync(tokenHash)
+                ?? throw new InvalidOrExpiredTokenException();
+
+            record.Security.ConsumePasswordResetToken(token, _tokenHasher);
+            await _repository.SaveSecurityStateAsync(record.CustomerId, record.Security);
+            await _repository.SetPasswordHashAsync(record.CustomerId, _passwordHasher.Hash(newPassword));
+        }
+
+        public async Task<LoginResponse> LoginAsync(string email, string password)
+        {
+            var normalizedEmail = email.Trim().ToLowerInvariant();
+            var customer = await _customerRepository.GetByEmailAsync(normalizedEmail);
+
+            if (customer is null || !_passwordHasher.Verify(password, customer.PasswordHash))
+                throw new InvalidCredentialsException();
+
+            if (customer.Status == CustomerStatus.Deactivated)
+                throw new AccountDeactivatedException();
+
+            var role = string.IsNullOrWhiteSpace(customer.Role) ? "Customer" : customer.Role.Trim();
+            // Frontend checks role === "Admin"
+            if (string.Equals(role, "Administrator", StringComparison.OrdinalIgnoreCase))
+                role = "Admin";
+
+            return new LoginResponse
+            {
+                Token = _jwtTokenService.CreateToken(customer),
+                Customer = new LoginCustomerDto
+                {
+                    CustomerId = customer.CustomerId,
+                    FullName = customer.Name,
+                    Email = customer.Email,
+                    Phone = customer.PhoneNumber,
+                    Role = role,
+                    Status = customer.Status.ToString()
+                }
+            };
         }
     }
 }

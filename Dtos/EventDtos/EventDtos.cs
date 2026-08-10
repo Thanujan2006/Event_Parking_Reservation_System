@@ -34,8 +34,16 @@ namespace Event_Parking_Reservation_System.Dtos
         public string VenueName { get; set; } = string.Empty;
         public string CategoryName { get; set; } = string.Empty;
         public DateTime EventDateTime { get; set; }
+
+        /// <summary>Date-only value used by the SPA cards (formatDate).</summary>
+        public string EventDate { get; set; } = string.Empty;
+
+        /// <summary>Start time "HH:mm:ss" used by the SPA (formatTime).</summary>
+        public string StartTime { get; set; } = string.Empty;
+
         public decimal TicketPrice { get; set; }
         public int Capacity { get; set; }
+        public int SeatsAvailable { get; set; }
     }
 
     /// <summary>Full detail view for admin edit screen / event detail page.</summary>
@@ -48,9 +56,13 @@ namespace Event_Parking_Reservation_System.Dtos
         public int CategoryId { get; set; }
         public string CategoryName { get; set; } = string.Empty;
         public DateTime EventDateTime { get; set; }
+        public string EventDate { get; set; } = string.Empty;
+        public string StartTime { get; set; } = string.Empty;
+        public string EndTime { get; set; } = string.Empty;
         public int DurationMinutes { get; set; }
         public decimal TicketPrice { get; set; }
         public int Capacity { get; set; }
+        public int SeatsAvailable { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 

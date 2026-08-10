@@ -23,6 +23,8 @@ const Api = (() => {
             const message = (data && data.message) || `Request failed (${res.status})`;
             const err = new Error(message);
             err.status = res.status;
+            err.error = data && data.error;
+            err.data = data;
             throw err;
         }
         return data;

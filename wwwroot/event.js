@@ -9,12 +9,13 @@ async function init() {
     if (!eventId) return showNotFound();
 
     try {
-        const [ev, seats, parking] = await Promise.all([
+        const [ev, seatPayload, parking] = await Promise.all([
             Api.get(`/events/${eventId}`),
             Api.get(`/events/${eventId}/seats`),
             Api.get(`/events/${eventId}/parking-slots`).catch(() => []), // parking layout may not exist yet
         ]);
         currentEvent = ev;
+        const seats = normalizeSeats(seatPayload);
         renderEventHeader(ev);
         renderSeatMap(seats);
         if (parking.length > 0) {
@@ -32,6 +33,18 @@ async function init() {
 function showNotFound() {
     document.getElementById("loading").style.display = "none";
     document.getElementById("event-empty").style.display = "block";
+}
+
+function normalizeSeats(raw) {
+    const list = Array.isArray(raw) ? raw : (raw?.seats || []);
+    return list.map((s) => ({
+        seatId: s.seatId,
+        seatRow: s.seatRow || s.rowLabel || "",
+        seatNumber: String(s.seatNumber ?? s.columnNumber ?? ""),
+        seatType: s.seatType || "",
+        price: s.price ?? s.effectivePrice ?? 0,
+        status: s.status,
+    }));
 }
 
 function renderEventHeader(ev) {

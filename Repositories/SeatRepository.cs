@@ -33,6 +33,12 @@ namespace Event_Parking_Reservation_System.Repositories
             return await _db.Set<Seat>().CountAsync(s => s.EventId == eventId);
         }
 
+        public async Task<int> CountAvailableSeatsForEventAsync(int eventId)
+        {
+            return await _db.Set<Seat>().CountAsync(s =>
+                s.EventId == eventId && s.Status == SeatStatus.Available);
+        }
+
         public async Task AddRangeAsync(IEnumerable<Seat> seats)
         {
             await _db.Set<Seat>().AddRangeAsync(seats);

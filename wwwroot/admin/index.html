@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin dashboard — EventPark</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+    <header class="site-header"><div id="nav-root"></div></header>
+
+    <section class="page-section">
+        <div class="container">
+            <h1>Admin dashboard</h1>
+            <p class="muted">Manage venues, categories and events. Customers search these on the public site.</p>
+
+            <div class="admin-tiles">
+                <a class="admin-tile" href="venues.html">
+                    <span class="admin-tile-label">Venues</span>
+                    <span class="admin-tile-value" id="stat-venues">—</span>
+                    <span class="admin-tile-hint">Add or remove venues →</span>
+                </a>
+                <a class="admin-tile" href="categories.html">
+                    <span class="admin-tile-label">Categories</span>
+                    <span class="admin-tile-value" id="stat-categories">—</span>
+                    <span class="admin-tile-hint">Add or remove categories →</span>
+                </a>
+                <a class="admin-tile" href="events.html">
+                    <span class="admin-tile-label">Events</span>
+                    <span class="admin-tile-value" id="stat-events">—</span>
+                    <span class="admin-tile-hint">Publish events for search →</span>
+                </a>
+            </div>
+
+            <div class="panel mt-24">
+                <h3>Quick tips</h3>
+                <ol style="color:var(--ink-soft);padding-left:1.2rem;margin:0;">
+                    <li>Create a <strong>venue</strong> first (name, address, capacity).</li>
+                    <li>Create a <strong>category</strong> (e.g. Music, Workshop).</li>
+                    <li>Create an <strong>event</strong> linked to that venue + category.</li>
+                    <li>Customers can then search and filter on the public Events page.</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <script src="../config.js"></script>
+    <script src="../api.js"></script>
+    <script src="../auth.js"></script>
+    <script src="../shared.js"></script>
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

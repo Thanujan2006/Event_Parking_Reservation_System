@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Events — Admin — EventPark</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+    <header class="site-header"><div id="nav-root"></div></header>
+
+    <section class="page-section">
+        <div class="container">
+            <div class="page-header-row">
+                <div>
+                    <h1>Events</h1>
+                    <p class="muted" style="margin:0;">Publish events so customers can search and book.</p>
+                </div>
+            </div>
+
+            <div class="grid-2" style="grid-template-columns: 1fr 1.2fr; gap: 24px; align-items:start;">
+                <div class="panel">
+                    <h3>Add event</h3>
+                    <div id="form-alert"></div>
+                    <form id="event-form">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Name</label>
+                            <input class="form-input" id="name" required maxlength="200" placeholder="e.g. Live Music Night" />
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="venueId">Venue</label>
+                                <select class="form-select" id="venueId" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="categoryId">Category</label>
+                                <select class="form-select" id="categoryId" required></select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="eventDateTime">Date &amp; time</label>
+                                <input class="form-input" id="eventDateTime" type="datetime-local" required />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="durationMinutes">Duration (minutes)</label>
+                                <input class="form-input" id="durationMinutes" type="number" min="30" value="120" required />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="ticketPrice">Ticket price (Rs.)</label>
+                                <input class="form-input" id="ticketPrice" type="number" min="0" step="0.01" required placeholder="1500" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="capacity">Capacity</label>
+                                <input class="form-input" id="capacity" type="number" min="1" required placeholder="200" />
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-block" type="submit" id="submit-btn">Add event</button>
+                    </form>
+                </div>
+
+                <div class="panel">
+                    <h3>All events</h3>
+                    <div id="list-loading" class="loading-spinner"></div>
+                    <div id="list-empty" class="muted" style="display:none;">No events yet. Add venues &amp; categories first, then create an event.</div>
+                    <div id="list-host" style="overflow-x:auto;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../config.js"></script>
+    <script src="../api.js"></script>
+    <script src="../auth.js"></script>
+    <script src="../shared.js"></script>
+    <script src="events.js"></script>
+</body>
+</html>

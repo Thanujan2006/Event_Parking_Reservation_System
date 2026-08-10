@@ -3,19 +3,24 @@ function renderNav(activePage) {
     const root = document.getElementById("nav-root");
     if (!root) return;
 
+    const base = Auth.pageBase();
     const customer = Auth.currentCustomer();
     const loggedIn = Auth.isLoggedIn();
     const isAdmin = Auth.isAdmin();
 
-    const links = [
-        { href: "index.html", label: "Events", key: "events" },
-    ];
-    if (loggedIn && !isAdmin) {
-        links.push({ href: "my-bookings.html", label: "My tickets", key: "bookings" });
-        links.push({ href: "dashboard.html", label: "Dashboard", key: "dashboard" });
-    }
+    const links = [];
     if (isAdmin) {
-        links.push({ href: "admin/index.html", label: "Admin console", key: "admin" });
+        links.push({ href: `${base}admin/index.html`, label: "Dashboard", key: "admin" });
+        links.push({ href: `${base}admin/venues.html`, label: "Venues", key: "venues" });
+        links.push({ href: `${base}admin/categories.html`, label: "Categories", key: "categories" });
+        links.push({ href: `${base}admin/events.html`, label: "Events", key: "admin-events" });
+        links.push({ href: `${base}index.html`, label: "Public site", key: "events" });
+    } else {
+        links.push({ href: `${base}index.html`, label: "Events", key: "events" });
+        if (loggedIn) {
+            links.push({ href: `${base}my-bookings.html`, label: "My tickets", key: "bookings" });
+            links.push({ href: `${base}dashboard.html`, label: "Dashboard", key: "dashboard" });
+        }
     }
 
     const linksHtml = links
@@ -26,14 +31,14 @@ function renderNav(activePage) {
         .join("");
 
     const rightHtml = loggedIn
-        ? `<span class="nav-user">${escapeHtml(customer?.fullName ?? "")}</span>
+        ? `<span class="nav-user">${escapeHtml(customer?.fullName ?? "")}${isAdmin ? " · Admin" : ""}</span>
        <button class="btn btn-ghost btn-sm" id="nav-logout-btn">Log out</button>`
-        : `<a class="btn btn-ghost btn-sm" href="login.html">Log in</a>
-       <a class="btn btn-primary btn-sm" href="register.html">Get tickets</a>`;
+        : `<a class="btn btn-ghost btn-sm" href="${base}login.html">Log in</a>
+       <a class="btn btn-primary btn-sm" href="${base}register.html">Get tickets</a>`;
 
     root.innerHTML = `
     <nav class="nav">
-      <a href="index.html" class="nav-brand">
+      <a href="${isAdmin ? `${base}admin/index.html` : `${base}index.html`}" class="nav-brand">
         <span class="nav-brand-mark" aria-hidden="true">&#9679;&#9673;</span>
         EventPark<span class="nav-brand-accent">.</span>
       </a>

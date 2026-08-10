@@ -1,6 +1,5 @@
 ﻿using Event_Parking_Reservation_System.Interfaces;
 using Event_Parking_Reservation_System.Models;
-using Microsoft.AspNetCore.Identity;
 using static Event_Parking_Reservation_System.Dtos.CustomerDtos.CustomerDtos;
 using static Event_Parking_Reservation_System.Exceptions.CustomerExceptions;
 

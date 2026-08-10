@@ -93,9 +93,9 @@ namespace Event_Parking_Reservation_System.Repositories
 
         public class EventCategoryRepository : IEventCategoryRepository
         {
-            private readonly DbContext _db;
+            private readonly AppDbContext _db;
 
-            public EventCategoryRepository(DbContext db)
+            public EventCategoryRepository(AppDbContext db)
             {
                 _db = db;
             }

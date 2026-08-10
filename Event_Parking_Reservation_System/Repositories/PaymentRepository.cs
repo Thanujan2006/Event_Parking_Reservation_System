@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Event_Parking_Reservation_System.Interfaces;
 
 
-namespace Event_Parking_Reservation_System.Reposotires
+namespace Event_Parking_Reservation_System.Repositories
 {
     public class PaymentRepository:IPaymentRepository
     

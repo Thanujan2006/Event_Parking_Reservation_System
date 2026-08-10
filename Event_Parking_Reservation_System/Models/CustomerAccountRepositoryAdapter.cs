@@ -1,14 +1,14 @@
-﻿using Event_Parking_Reservation_System.Interfaces;
+﻿using Event_Parking_Reservation_System.Data;
+using Event_Parking_Reservation_System.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using static Event_Parking_Reservation_System.Interfaces.IAuthService;
 
 namespace Event_Parking_Reservation_System.Models
 {
-    public class CustomerAccountRepositoryAdapter
+    public class CustomerAccountRepositoryAdapter : ICustomerAccountRepository
     {
-        private readonly DbContext _db;
+        private readonly AppDbContext _db;
 
-        public CustomerAccountRepositoryAdapter(DbContext db)
+        public CustomerAccountRepositoryAdapter(AppDbContext db)
         {
             _db = db;
         }

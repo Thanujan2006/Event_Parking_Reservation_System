@@ -3,7 +3,7 @@ using Event_Parking_Reservation_System.Interfaces;
 using Event_Parking_Reservation_System.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Event_Parking_Reservation_System.Reposotires
+namespace Event_Parking_Reservation_System.Repositories
 {
     
         public class CustomerRepository : ICustomerRepository

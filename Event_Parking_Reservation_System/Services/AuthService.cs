@@ -1,13 +1,11 @@
 ﻿using Event_Parking_Reservation_System.Interfaces;
 using Event_Parking_Reservation_System.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using static Event_Parking_Reservation_System.Exceptions.AuthExceptions;
-using static Event_Parking_Reservation_System.Interfaces.IAuthService;
 
 namespace Event_Parking_Reservation_System.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly ICustomerAccountRepository _repository;
         private readonly IAuthEmailSender _emailSender;

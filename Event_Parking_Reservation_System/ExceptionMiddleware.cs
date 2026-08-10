@@ -1,45 +1,54 @@
-﻿namespace Event_Parking_Reservation_System
+﻿using System.Net;
+using System.Text.Json;
+using Event_Parking_Reservation_System.Exceptions;
+
+namespace Event_Parking_Reservation_System
 {
-    using System.Net;
-    using System.Text.Json;
-
-    namespace Event_Parking_Reservation_System
+    public class ExceptionMiddleware
     {
-        public class ExceptionMiddleware
+        private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionMiddleware> _logger;
+
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
         {
-            private readonly RequestDelegate _next;
-            private readonly ILogger<ExceptionMiddleware> _logger;
+            _next = next;
+            _logger = logger;
+        }
 
-            public ExceptionMiddleware(
-                RequestDelegate next,
-                ILogger<ExceptionMiddleware> logger)
+        public async Task InvokeAsync(HttpContext context)
+        {
+            try
             {
-                _next = next;
-                _logger = logger;
+                await _next(context);
             }
-
-            public async Task InvokeAsync(HttpContext context)
+            catch (DomainException ex)
             {
-                try
+                context.Response.StatusCode = ex switch
                 {
-                    await _next(context);
-                }
-                catch (Exception ex)
+                    NotFoundException => StatusCodes.Status404NotFound,
+                    BadRequestException => StatusCodes.Status400BadRequest,
+                    ConflictException => StatusCodes.Status409Conflict,
+                    ForbiddenException => StatusCodes.Status403Forbidden,
+                    _ => StatusCodes.Status400BadRequest
+                };
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(JsonSerializer.Serialize(new
                 {
-                    _logger.LogError(ex, "An unhandled exception occurred.");
-
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-
-                    var response = new
-                    {
-                        success = false,
-                        message = "An unexpected error occurred."
-                    };
-
-                    await context.Response.WriteAsync(
-                        JsonSerializer.Serialize(response));
-                }
+                    success = false,
+                    error = ex.ErrorCode,
+                    message = ex.Message
+                }));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unhandled exception occurred.");
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(JsonSerializer.Serialize(new
+                {
+                    success = false,
+                    message = "An unexpected error occurred."
+                }));
             }
         }
     }

@@ -54,7 +54,7 @@ namespace Event_Parking_Reservation_System.Services
             var duplicateInPayload = dto.Slots
                 .GroupBy(s => s.SlotNumber.Trim(), StringComparer.OrdinalIgnoreCase)
                 .Any(g => g.Count() > 1);
-            if (duplicateInPayload) ;
+            if (duplicateInPayload)
             {
                 throw new BadRequestException("DUPLICATE_SLOT_NUMBER",
                     "Slot numbers must be unique within the submitted layout.");

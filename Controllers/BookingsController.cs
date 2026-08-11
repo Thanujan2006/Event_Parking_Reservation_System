@@ -75,6 +75,21 @@ namespace Event_Parking_Reservation_System.Controllers
 
         private bool IsAdmin() =>
             User.IsInRole("Admin");
+
+     
+
+
+        /// <summary>POST /api/bookings/{id}/confirm — confirm a pending booking.</summary>
+        [HttpPost("{id:int}/confirm")]
+        public async Task<IActionResult> Confirm(int id)
+        {
+            await _bookingService.ConfirmAsync(id);
+            return Ok(new
+            {
+                message = "Booking confirmed successfully.",
+                bookingId = id
+            });
+        }
     }
 }
 

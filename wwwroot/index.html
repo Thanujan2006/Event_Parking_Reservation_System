@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EventPark — Browse events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header class="site-header"><div id="nav-root"></div></header>
+
+    <section class="page-section">
+        <div class="container">
+            <h1>Find your next night out.</h1>
+            <p class="muted" style="max-width:560px">Browse live shows, conferences and workshops across Sri Lanka. Reserve your seat — and a parking slot right next to it — in one booking.</p>
+
+            <div class="panel" style="margin:24px 0;">
+                <div class="form-row">
+                    <div class="form-group mb-0">
+                        <label class="form-label" for="f-name">Search by name</label>
+                        <input class="form-input" id="f-name" type="text" placeholder="e.g. Live Music Night" />
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label" for="f-date">Date</label>
+                        <input class="form-input" id="f-date" type="date" />
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label" for="f-venue">Venue</label>
+                        <select class="form-select" id="f-venue"><option value="">All venues</option></select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label" for="f-category">Category</label>
+                        <select class="form-select" id="f-category"><option value="">All categories</option></select>
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-24" id="search-btn">Search events</button>
+                <button class="btn btn-ghost mt-24" id="clear-btn">Clear filters</button>
+            </div>
+
+            <div id="events-loading" class="loading-spinner"></div>
+            <div id="events-empty" class="empty-state" style="display:none;">
+                <h3>No events match your search.</h3>
+                <p>Try clearing a filter or checking back soon — new events are added regularly.</p>
+            </div>
+            <div id="events-grid" class="ticket-grid"></div>
+        </div>
+    </section>
+
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="shared.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

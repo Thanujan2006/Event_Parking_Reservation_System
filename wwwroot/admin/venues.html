@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venues — Admin — EventPark</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+    <header class="site-header"><div id="nav-root"></div></header>
+
+    <section class="page-section">
+        <div class="container">
+            <div class="page-header-row">
+                <div>
+                    <h1>Venues</h1>
+                    <p class="muted" style="margin:0;">Add venues that events can be hosted at.</p>
+                </div>
+            </div>
+
+            <div class="grid-2" style="grid-template-columns: 1fr 1.2fr; gap: 24px; align-items:start;">
+                <div class="panel">
+                    <h3>Add venue</h3>
+                    <div id="form-alert"></div>
+                    <form id="venue-form">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Name</label>
+                            <input class="form-input" id="name" required maxlength="150" placeholder="e.g. Nelum Pokuna" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="address">Address</label>
+                            <input class="form-input" id="address" required maxlength="500" placeholder="e.g. Colombo 07" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="capacity">Total capacity</label>
+                            <input class="form-input" id="capacity" type="number" min="1" required placeholder="e.g. 500" />
+                        </div>
+                        <button class="btn btn-primary btn-block" type="submit" id="submit-btn">Add venue</button>
+                    </form>
+                </div>
+
+                <div class="panel">
+                    <h3>All venues</h3>
+                    <div id="list-loading" class="loading-spinner"></div>
+                    <div id="list-empty" class="muted" style="display:none;">No venues yet. Add one on the left.</div>
+                    <div id="list-host" style="overflow-x:auto;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../config.js"></script>
+    <script src="../api.js"></script>
+    <script src="../auth.js"></script>
+    <script src="../shared.js"></script>
+    <script src="venues.js"></script>
+</body>
+</html>
